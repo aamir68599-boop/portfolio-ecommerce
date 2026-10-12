@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GrowthVia Digital — UI/UX Design Portfolio | Saree Ecommerce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   RESET & DESIGN TOKENS
+============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#08080a;
+  --bg-soft:#0d0d10;
+  --surface:#111114;
+  --surface-2:#17171c;
+  --border:rgba(255,255,255,.07);
+  --border-2:rgba(255,255,255,.13);
+  --text:#f4f4f6;
+  --text-2:#a8a8b2;
+  --text-3:#65656f;
+  --accent:#d4a574;
+  --accent-2:#e8c39e;
+  --accent-soft:rgba(212,165,116,.1);
+  --accent-glow:rgba(212,165,116,.22);
+
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-serif:'Fraunces',Georgia,serif;
+
+  --max:1200px;
+  --radius:20px;
+  --radius-sm:12px;
+  --radius-pill:100px;
+
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-2:cubic-bezier(.65,0,.35,1);
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-sans);
+  font-weight:400;
+  line-height:1.65;
+  font-size:16px;
+  overflow-x:hidden;
+  position:relative;
+}
+
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+::selection{background:var(--accent);color:var(--bg);}
+
+::-webkit-scrollbar{width:9px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:#26262e;border-radius:10px;border:2px solid var(--bg);}
+::-webkit-scrollbar-thumb:hover{background:#3a3a44;}
+
+/* ============================================================
+   LAYOUT UTILITIES
+============================================================ */
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 32px;}
+.serif{font-family:var(--font-serif);}
+.accent{color:var(--accent);}
+.italic{font-style:italic;}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  transition:background .45s var(--ease),backdrop-filter .45s var(--ease),border-color .45s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  background:rgba(8,8,10,.75);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom-color:var(--border);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:78px;}
+
+.logo{display:flex;align-items:center;gap:11px;font-size:1rem;font-weight:500;letter-spacing:-.01em;}
+.logo-mark{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-serif);font-size:.8rem;font-weight:500;color:var(--bg);
+  box-shadow:0 0 20px var(--accent-glow);
+}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-text strong{font-size:.92rem;font-weight:600;letter-spacing:-.01em;}
+.logo-text span{font-size:.62rem;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;font-weight:400;}
+
+.nav-links{display:flex;align-items:center;gap:38px;}
+.nav-links a{
+  font-size:.875rem;color:var(--text-2);
+  transition:color .28s var(--ease);position:relative;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:-6px;
+  width:0;height:1.5px;background:var(--accent);border-radius:2px;
+  transition:width .35s var(--ease);
+}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{width:100%;}
+
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.83rem;font-weight:500;
+  padding:10px 22px;border-radius:var(--radius-pill);
+  border:1px solid var(--border-2);background:rgba(255,255,255,.02);
+  transition:all .3s var(--ease);
+}
+.nav-cta:hover{
+  background:var(--accent);color:var(--bg);border-color:var(--accent);
+  box-shadow:0 0 28px var(--accent-glow);transform:translateY(-1px);
+}
+
+.burger{display:none;width:42px;height:42px;position:relative;z-index:1001;}
+.burger span{
+  position:absolute;left:10px;width:22px;height:1.6px;
+  background:var(--text);border-radius:2px;transition:all .35s var(--ease);
+}
+.burger span:nth-child(1){top:16px;}
+.burger span:nth-child(2){top:24px;}
+.burger.open span:nth-child(1){top:20px;transform:rotate(45deg);}
+.burger.open span:nth-child(2){top:20px;transform:rotate(-45deg);}
+
+.mobile-menu{
+  position:fixed;inset:0;z-index:899;
+  background:rgba(8,8,10,.97);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 40px;gap:4px;opacity:0;pointer-events:none;
+  transition:opacity .45s var(--ease);
+}
+.mobile-menu.open{opacity:1;pointer-events:auto;}
+.mobile-menu a{
+  font-family:var(--font-serif);font-size:2.4rem;font-weight:300;
+  color:var(--text-2);padding:12px 0;border-bottom:1px solid var(--border);
+  transition:color .3s var(--ease),padding-left .35s var(--ease);
+}
+.mobile-menu a:hover{color:var(--accent);padding-left:14px;}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.9rem;font-weight:500;
+  padding:15px 30px;border-radius:var(--radius-pill);
+  transition:all .35s var(--ease);white-space:nowrap;letter-spacing:.005em;
+}
+.btn svg{width:15px;height:15px;transition:transform .35s var(--ease);}
+.btn:hover svg{transform:translateX(3px);}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:var(--bg);box-shadow:0 0 0 rgba(212,165,116,0);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 44px var(--accent-glow);}
+
+.btn-ghost{
+  border:1px solid var(--border-2);background:rgba(255,255,255,.015);color:var(--text);
+}
+.btn-ghost:hover{
+  background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.28);transform:translateY(-2px);
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;align-items:center;padding:150px 0 100px;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;top:-25%;right:-12%;width:850px;height:850px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,165,116,.15) 0%,rgba(212,165,116,.04) 38%,transparent 68%);
+  filter:blur(28px);pointer-events:none;
+}
+.hero-bg-2{
+  position:absolute;bottom:-35%;left:-18%;width:750px;height:750px;border-radius:50%;
+  background:radial-gradient(circle,rgba(120,110,220,.09) 0%,transparent 65%);
+  filter:blur(40px);pointer-events:none;
+}
+.hero-lines{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:88px 88px;
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 40%,#000 25%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 75% 60% at 50% 40%,#000 25%,transparent 100%);
+}
+
+.hero-layout{
+  position:relative;z-index:2;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+
+/* --- Left content --- */
+.hero-left{max-width:620px;}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-2);font-weight:400;
+  padding:8px 18px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);background:rgba(255,255,255,.025);
+  margin-bottom:36px;
+}
+.eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;background:#5eead4;
+  box-shadow:0 0 10px #5eead4;animation:pulse 2.4s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+
+.hero-title{
+  font-family:var(--font-serif);font-weight:300;
+  font-size:clamp(2.4rem,5.2vw,4.4rem);
+  line-height:1.06;letter-spacing:-.028em;margin-bottom:28px;
+}
+.hero-title em{font-style:italic;font-weight:400;color:var(--accent);}
+
+.hero-sub{
+  font-size:clamp(1rem,1.25vw,1.08rem);color:var(--text-2);
+  max-width:52ch;line-height:1.78;font-weight:300;margin-bottom:42px;
+}
+.hero-sub strong{color:var(--text);font-weight:500;}
+
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:56px;}
+
+.hero-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;
+}
+.stat{background:var(--bg);padding:22px 24px;transition:background .35s var(--ease);}
+.stat:hover{background:var(--surface);}
+.stat-num{
+  font-family:var(--font-serif);font-size:1.8rem;font-weight:400;
+  line-height:1;color:var(--text);margin-bottom:6px;
+  display:flex;align-items:baseline;gap:2px;
+}
+.stat-num span{color:var(--accent);font-size:1.15rem;}
+.stat-label{font-size:.72rem;color:var(--text-3);letter-spacing:.03em;line-height:1.4;}
+
+/* --- Right visual showcase --- */
+.hero-right{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  min-height:520px;
+}
+
+.showcase-wrap{
+  position:relative;width:100%;max-width:500px;
+}
+
+/* floating badge */
+.showcase-badge{
+  position:absolute;top:-6px;left:-10px;z-index:10;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 18px;border-radius:var(--radius-pill);
+  background:rgba(17,17,20,.92);
+  border:1px solid var(--border-2);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  animation:floatY 5s ease-in-out infinite;
+}
+.showcase-badge i{
+  width:8px;height:8px;border-radius:50%;background:#5eead4;
+  box-shadow:0 0 12px #5eead4;display:block;
+}
+.showcase-badge span{font-size:.74rem;color:var(--text-2);letter-spacing:.02em;}
+
+/* project stack */
+.showcase-stack{
+  position:relative;width:100%;
+  aspect-ratio:1/0.92;
+}
+
+.stack-card{
+  position:absolute;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  background:var(--surface-2);
+  transition:transform .7s var(--ease),box-shadow .7s var(--ease);
+  will-change:transform;
+}
+.stack-card:hover{
+  box-shadow:0 40px 100px rgba(0,0,0,.7);
+  z-index:20 !important;
+}
+
+/* main big card — right side / back */
+.stack-main{
+  width:74%;height:82%;
+  top:6%;right:0;z-index:2;
+  background:linear-gradient(155deg,#5c1a2b 0%,#2a0f18 100%);
+}
+.stack-main::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:22px 22px;
+  opacity:.6;
+}
+.stack-main-inner{
+  position:relative;z-index:2;padding:22px;height:100%;
+  display:flex;flex-direction:column;
+}
+.stack-browser-bar{
+  display:flex;align-items:center;gap:5px;margin-bottom:16px;
+}
+.stack-browser-bar i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);}
+.stack-browser-bar i:nth-child(1){background:rgba(255,110,100,.6);}
+.stack-browser-bar i:nth-child(2){background:rgba(240,200,110,.55);}
+.stack-browser-bar i:nth-child(3){background:rgba(120,215,150,.55);}
+
+.stack-main-hero{
+  flex:1;border-radius:10px;
+  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.08);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:18px;margin-bottom:12px;
+}
+.stack-main-hero::before{
+  content:"";position:absolute;top:-30%;right:-20%;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);
+}
+.stack-h1{
+  width:66%;height:10px;border-radius:4px;background:rgba(255,255,255,.78);
+  margin-bottom:7px;position:relative;z-index:2;
+}
+.stack-h2{
+  width:42%;height:6px;border-radius:3px;background:rgba(255,255,255,.4);
+  margin-bottom:14px;position:relative;z-index:2;
+}
+.stack-btn{
+  width:72px;height:20px;border-radius:100px;background:var(--accent);
+  position:relative;z-index:2;opacity:.9;
+}
+.stack-main-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+}
+.stack-mini{
+  border-radius:8px;overflow:hidden;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);
+}
+.stack-mini-img{
+  height:44px;
+  background:linear-gradient(150deg,#9c5a3c,#5c1a2b);
+}
+.stack-mini:nth-child(2) .stack-mini-img{filter:hue-rotate(20deg);}
+.stack-mini:nth-child(3) .stack-mini-img{filter:hue-rotate(-20deg);}
+.stack-mini-lines{padding:7px;}
+.stack-mini-lines span{
+  display:block;height:3.5px;border-radius:2px;background:rgba(255,255,255,.14);
+  margin-bottom:3.5px;
+}
+.stack-mini-lines span:last-child{width:55%;margin-bottom:0;background:var(--accent);opacity:.7;}
+
+/* small card 1 — bottom left / middle */
+.stack-small-1{
+  width:56%;height:52%;
+  bottom:2%;left:0;z-index:3;
+  background:linear-gradient(155deg,#134e3a 0%,#072018 100%);
+  animation:floatY 6s ease-in-out infinite;
+}
+.stack-small-1 .stack-mini-img{background:linear-gradient(150deg,#4a8f6a,#134e3a);}
+.stack-small-1 .stack-mini:nth-child(2) .stack-mini-img{filter:hue-rotate(20deg);}
+.stack-small-1 .stack-mini:nth-child(3) .stack-mini-img{filter:hue-rotate(-20deg);}
+
+/* small card 2 — top left / front */
+.stack-small-2{
+  width:48%;height:44%;
+  top:0;left:2%;z-index:4;
+  background:linear-gradient(155deg,#2e2a6b 0%,#14122e 100%);
+  animation:floatY 7s ease-in-out infinite reverse;
+}
+.stack-small-2 .stack-mini-img{background:linear-gradient(150deg,#7a5c9e,#2e2a6b);}
+.stack-small-2 .stack-mini:nth-child(2) .stack-mini-img{filter:hue-rotate(20deg);}
+.stack-small-2 .stack-mini:nth-child(3) .stack-mini-img{filter:hue-rotate(-20deg);}
+
+@keyframes floatY{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-12px);}
+}
+
+/* glow behind showcase */
+.showcase-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:120%;height:120%;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,165,116,.1) 0%,transparent 65%);
+  filter:blur(20px);pointer-events:none;z-index:0;
+}
+
+/* --- Scroll cue --- */
+.scroll-cue{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text-3);z-index:2;
+}
+.scroll-line{
+  width:1px;height:46px;
+  background:linear-gradient(to bottom,var(--border-2),transparent);
+  position:relative;overflow:hidden;
+}
+.scroll-line::after{
+  content:"";position:absolute;top:-46px;left:0;width:1px;height:46px;
+  background:linear-gradient(to bottom,transparent,var(--accent));
+  animation:scrollDown 2.4s var(--ease) infinite;
+}
+@keyframes scrollDown{0%{top:-46px;}100%{top:46px;}}
+
+/* ============================================================
+   MARQUEE
+============================================================ */
+.marquee{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:28px 0;overflow:hidden;background:var(--bg-soft);position:relative;
+}
+.marquee::before,.marquee::after{
+  content:"";position:absolute;top:0;bottom:0;width:160px;z-index:2;pointer-events:none;
+}
+.marquee::before{left:0;background:linear-gradient(to right,var(--bg-soft),transparent);}
+.marquee::after{right:0;background:linear-gradient(to left,var(--bg-soft),transparent);}
+.marquee-track{display:flex;width:max-content;animation:marquee 42s linear infinite;}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.marquee-item{
+  display:flex;align-items:center;gap:28px;padding:0 28px;
+  font-size:.82rem;color:var(--text-2);letter-spacing:.08em;
+  text-transform:uppercase;white-space:nowrap;font-weight:400;
+}
+.marquee-item::after{
+  content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.65;
+}
+
+/* ============================================================
+   SECTION SYSTEM
+============================================================ */
+.section{padding:140px 0;position:relative;}
+.section-head{margin-bottom:72px;max-width:760px;}
+.section-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;margin-bottom:24px;
+}
+.section-tag::before{content:"";width:28px;height:1px;background:var(--accent);opacity:.6;}
+.section-title{
+  font-family:var(--font-serif);font-weight:300;
+  font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.12;
+  letter-spacing:-.022em;margin-bottom:20px;
+}
+.section-desc{
+  color:var(--text-2);font-size:1.02rem;font-weight:300;
+  line-height:1.78;max-width:60ch;
+}
+
+/* ============================================================
+   PORTFOLIO — CASE STUDIES
+============================================================ */
+.portfolio-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:28px;
+}
+
+.case-card{
+  position:relative;border:1px solid var(--border);border-radius:24px;
+  background:linear-gradient(165deg,var(--surface) 0%,var(--bg-soft) 100%);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:border-color .5s var(--ease),transform .5s var(--ease);
+}
+.case-card:hover{border-color:var(--border-2);transform:translateY(-6px);}
+.case-card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:24px;
+  background:radial-gradient(650px circle at var(--mx,50%) var(--my,0%),rgba(212,165,116,.08),transparent 42%);
+  opacity:0;transition:opacity .55s var(--ease);
+}
+.case-card:hover::after{opacity:1;}
+
+.case-visual{
+  position:relative;height:250px;overflow:hidden;
+  border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(circle at 25% 15%,var(--c1,transparent),transparent 62%),
+    radial-gradient(circle at 82% 92%,var(--c2,transparent),transparent 62%),
+    var(--surface-2);
+  display:flex;align-items:center;justify-content:center;
+}
+.case-visual::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at 50% 50%,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 30%,transparent 80%);
+}
+
+.mockup{
+  position:relative;z-index:2;width:72%;max-width:300px;
+  border-radius:10px;background:rgba(10,10,13,.94);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 24px 60px rgba(0,0,0,.55);overflow:hidden;
+  transform:translateY(24px);transition:transform .6s var(--ease);
+}
+.case-card:hover .mockup{transform:translateY(12px) scale(1.02);}
+
+.mockup-bar{
+  display:flex;align-items:center;gap:5px;padding:9px 12px;
+  background:rgba(255,255,255,.035);border-bottom:1px solid rgba(255,255,255,.06);
+}
+.mockup-bar i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.14);}
+.mockup-bar i:nth-child(1){background:rgba(255,110,100,.55);}
+.mockup-bar i:nth-child(2){background:rgba(240,200,110,.5);}
+.mockup-bar i:nth-child(3){background:rgba(120,215,150,.5);}
+
+.mockup-body{padding:12px;}
+.mockup-hero{
+  height:88px;border-radius:8px;margin-bottom:10px;
+  background:linear-gradient(135deg,var(--c1-solid),var(--c2-solid));
+  position:relative;overflow:hidden;padding:12px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.mockup-hero::before{
+  content:"";position:absolute;top:-35%;right:-18%;width:130px;height:130px;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 68%);
+}
+.mockup-h1{width:62%;height:8px;border-radius:3px;background:rgba(255,255,255,.72);margin-bottom:5px;position:relative;z-index:2;}
+.mockup-h2{width:36%;height:5px;border-radius:3px;background:rgba(255,255,255,.35);margin-bottom:9px;position:relative;z-index:2;}
+.mockup-btn{width:52px;height:14px;border-radius:100px;background:rgba(255,255,255,.85);position:relative;z-index:2;}
+.mockup-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.mockup-card{border-radius:6px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);}
+.mockup-card-img{height:40px;background:linear-gradient(150deg,var(--c1-solid),var(--c2-solid));opacity:.85;}
+.mockup-card:nth-child(2) .mockup-card-img{filter:hue-rotate(16deg);}
+.mockup-card:nth-child(3) .mockup-card-img{filter:hue-rotate(-16deg);}
+.mockup-lines{padding:6px;}
+.mockup-lines span{display:block;height:3.5px;border-radius:2px;background:rgba(255,255,255,.12);margin-bottom:3.5px;}
+.mockup-lines span:last-child{width:55%;margin-bottom:0;background:var(--accent);opacity:.65;}
+
+.case-content{padding:32px 32px 34px;display:flex;flex-direction:column;flex:1;}
+.case-meta{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.case-num{font-family:var(--font-serif);font-size:.85rem;color:var(--accent);opacity:.85;}
+.case-line{flex:1;height:1px;background:var(--border);max-width:44px;}
+.case-year{font-size:.72rem;color:var(--text-3);letter-spacing:.1em;font-weight:400;}
+
+.case-title{
+  font-family:var(--font-serif);font-weight:400;font-size:1.6rem;
+  line-height:1.15;letter-spacing:-.018em;margin-bottom:6px;
+}
+.case-cat{font-size:.83rem;color:var(--accent);margin-bottom:16px;font-weight:400;}
+.case-desc{color:var(--text-2);font-size:.9rem;font-weight:300;line-height:1.72;margin-bottom:22px;}
+
+.case-results{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;}
+.chip{
+  display:flex;flex-direction:column;padding:11px 16px;border-radius:11px;
+  background:rgba(255,255,255,.028);border:1px solid var(--border);
+  min-width:86px;transition:all .3s var(--ease);
+}
+.case-card:hover .chip{background:var(--accent-soft);border-color:rgba(212,165,116,.2);}
+.chip-val{font-family:var(--font-serif);font-size:1.18rem;color:var(--accent);line-height:1;margin-bottom:4px;}
+.chip-key{font-size:.63rem;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;}
+
+.case-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px;}
+.tag{
+  font-size:.7rem;color:var(--text-2);padding:5px 12px;border-radius:100px;
+  border:1px solid var(--border);background:rgba(255,255,255,.018);
+}
+
+.case-link{
+  display:inline-flex;align-items:center;gap:9px;font-size:.85rem;font-weight:500;
+  color:var(--text);padding-bottom:3px;border-bottom:1px solid var(--border-2);
+  align-self:flex-start;margin-top:auto;transition:all .35s var(--ease);
+}
+.case-link:hover{color:var(--accent);border-color:var(--accent);gap:15px;}
+.case-link svg{width:14px;height:14px;}
+
+.portfolio-foot{text-align:center;margin-top:64px;padding-top:44px;border-top:1px solid var(--border);}
+.portfolio-foot p{font-size:.92rem;color:var(--text-2);font-weight:300;margin-bottom:22px;}
+
+/* ============================================================
+   ABOUT
+============================================================ */
+.about{border-top:1px solid var(--border);background:var(--bg-soft);}
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:start;}
+.about-text p{color:var(--text-2);font-size:1.04rem;font-weight:300;line-height:1.85;margin-bottom:22px;}
+.about-text p strong{color:var(--text);font-weight:500;}
+
+.about-skills{
+  display:grid;gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+}
+.skill{
+  background:var(--bg-soft);padding:22px 26px;
+  display:flex;align-items:flex-start;gap:16px;
+  transition:background .35s var(--ease),padding-left .35s var(--ease);
+}
+.skill:hover{background:var(--surface);padding-left:32px;}
+.skill-icon{
+  flex-shrink:0;width:36px;height:36px;border-radius:10px;
+  background:var(--accent-soft);border:1px solid rgba(212,165,116,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:600;color:var(--accent);letter-spacing:.02em;
+}
+.skill-body h4{font-size:.94rem;font-weight:500;margin-bottom:5px;letter-spacing:-.005em;}
+.skill-body p{font-size:.81rem;color:var(--text-2);font-weight:300;line-height:1.55;}
+
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact{position:relative;padding:150px 0;text-align:center;overflow:hidden;border-top:1px solid var(--border);}
+.contact-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,165,116,.14) 0%,transparent 62%);
+  filter:blur(24px);pointer-events:none;
+}
+.contact-inner{position:relative;z-index:2;}
+.contact-title{
+  font-family:var(--font-serif);font-weight:300;
+  font-size:clamp(2.4rem,5.8vw,4.4rem);line-height:1.06;
+  letter-spacing:-.028em;max-width:16ch;margin:0 auto 26px;
+}
+.contact-title em{font-style:italic;font-weight:400;color:var(--accent);}
+.contact-sub{
+  color:var(--text-2);font-size:1.04rem;font-weight:300;
+  max-width:48ch;margin:0 auto 46px;line-height:1.78;
+}
+.contact-actions{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:60px;}
+
+.contact-info{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--border);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  max-width:840px;margin:0 auto;text-align:left;
+}
+.info-item{background:var(--bg);padding:26px 28px;transition:background .35s var(--ease);}
+.info-item:hover{background:var(--surface);}
+.info-label{font-size:.68rem;color:var(--text-3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
+.info-val{font-size:.92rem;color:var(--text);font-weight:400;line-height:1.5;}
+.info-val a{transition:color .3s var(--ease);border-bottom:1px solid transparent;}
+.info-val a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer{border-top:1px solid var(--border);padding:56px 0 42px;background:var(--bg-soft);}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:48px;flex-wrap:wrap;margin-bottom:44px;}
+.footer-brand{max-width:360px;}
+.footer-brand .logo{margin-bottom:16px;}
+.footer-brand p{font-size:.86rem;color:var(--text-2);font-weight:300;line-height:1.7;}
+.footer-cols{display:flex;gap:72px;flex-wrap:wrap;}
+.footer-col h5{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-bottom:18px;font-weight:500;}
+.footer-col a{display:block;font-size:.87rem;color:var(--text-2);margin-bottom:11px;transition:color .3s var(--ease),transform .3s var(--ease);}
+.footer-col a:hover{color:var(--accent);transform:translateX(3px);}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+  padding-top:30px;border-top:1px solid var(--border);font-size:.77rem;color:var(--text-3);
+}
+.footer-socials{display:flex;gap:20px;}
+.footer-socials a{transition:color .3s var(--ease);}
+.footer-socials a:hover{color:var(--accent);}
+
+/* ============================================================
+   SCROLL REVEAL
+============================================================ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+.reveal.in{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}
+.d2{transition-delay:.16s;}
+.d3{transition-delay:.24s;}
+.d4{transition-delay:.32s;}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media(max-width:1080px){
+  .about-grid{grid-template-columns:1fr;gap:56px;}
+  .hero-layout{grid-template-columns:1fr;gap:60px;}
+  .hero-right{min-height:420px;order:-1;}
+  .showcase-wrap{max-width:440px;margin:0 auto;}
+  .hero-left{max-width:100%;}
+}
+
+@media(max-width:960px){
+  .nav-links,.nav-cta{display:none;}
+  .burger{display:block;}
+  .portfolio-grid{grid-template-columns:1fr;gap:24px;}
+  .section{padding:110px 0;}
+  .hero{padding:130px 0 90px;}
+}
+
+@media(max-width:680px){
+  .wrap{padding:0 22px;}
+  .hero-stats{grid-template-columns:1fr;}
+  .contact-info{grid-template-columns:1fr;}
+  .hero-actions{width:100%;}
+  .btn{flex:1;justify-content:center;padding:14px 22px;}
+  .footer-top{flex-direction:column;gap:40px;}
+  .footer-cols{gap:48px;}
+  .mobile-menu a{font-size:2rem;}
+  .contact{padding:110px 0;}
+  .case-content{padding:26px 24px 28px;}
+  .case-visual{height:220px;}
+  .scroll-cue{display:none;}
+  .section-head{margin-bottom:52px;}
+  .hero-right{min-height:340px;}
+  .showcase-badge{top:-14px;left:-4px;padding:8px 14px;}
+}
+
+@media(max-width:420px){
+  .case-results{gap:7px;}
+  .chip{padding:10px 13px;min-width:78px;}
+  .chip-val{font-size:1.05rem;}
+  .hero-right{min-height:300px;}
+  .stack-h1{width:70%;height:8px;}
+  .stack-h2{width:48%;height:5px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#home" class="logo">
+      <span class="logo-mark">G</span>
+      <span class="logo-text">
+        <strong>GrowthVia</strong>
+        <span>Digital</span>
+      </span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <a href="#contact" class="nav-cta">
+      Let's Talk
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <button class="burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO
+============================================================ -->
+<header class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-2"></div>
+  <div class="hero-lines"></div>
+
+  <div class="wrap hero-layout">
+
+    <!-- LEFT: Content -->
+    <div class="hero-left">
+      <div class="eyebrow reveal">
+        <span class="eyebrow-dot"></span>
+        Available for UI/UX roles
+      </div>
+
+      <h1 class="hero-title reveal d1">
+        Designing <em>elegant</em> ecommerce experiences for modern Indian brands.
+      </h1>
+
+      <p class="hero-sub reveal d2">
+        I'm a UI/UX designer at <strong>GrowthVia Digital</strong> with
+        <strong>4 shipped saree ecommerce platforms</strong> — turning complex
+        product journeys into calm, confident interfaces that respect both the
+        craft of the product and the people buying it.
+      </p>
+
+      <div class="hero-actions reveal d3">
+        <a href="#portfolio" class="btn btn-primary">
+          View Case Studies
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+
+      <div class="hero-stats reveal d4">
+        <div class="stat">
+          <div class="stat-num">04<span>+</span></div>
+          <div class="stat-label">Saree Ecommerce Projects</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">12<span>k</span></div>
+          <div class="stat-label">Users Reached Across Platforms</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3<span>+</span></div>
+          <div class="stat-label">Years Designing Products</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Visual showcase -->
+    <div class="hero-right reveal d2">
+      <div class="showcase-wrap">
+
+        <div class="showcase-glow"></div>
+
+        <!-- Live badge -->
+        <div class="showcase-badge">
+          <i></i>
+          <span>4 live projects</span>
+        </div>
+
+        <div class="showcase-stack">
+
+          <!-- Main big card — Vastraa-inspired -->
+          <div class="stack-card stack-main">
+            <div class="stack-main-inner">
+              <div class="stack-browser-bar"><i></i><i></i><i></i></div>
+              <div class="stack-main-hero">
+                <div class="stack-h1"></div>
+                <div class="stack-h2"></div>
+                <div class="stack-btn"></div>
+              </div>
+              <div class="stack-main-cards">
+                <div class="stack-mini"><div class="stack-mini-img"></div><div class="stack-mini-lines"><span></span><span></span></div></div>
+                <div class="stack-mini"><div class="stack-mini-img"></div><div class="stack-mini-lines"><span></span><span></span></div></div>
+                <div class="stack-mini"><div class="stack-mini-img"></div><div class="stack-mini-lines"><span></span><span></span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Small card 1 — Silk Route-inspired -->
+          <div class="stack-card stack-small-1">
+            <div class="stack-main-inner">
+              <div class="stack-browser-bar"><i></i><i></i><i></i></div>
+              <div class="stack-main-hero" style="flex:1;margin-bottom:0;">
+                <div class="stack-h1" style="width:70%;"></div>
+                <div class="stack-h2" style="width:44%;"></div>
+                <div class="stack-btn" style="width:56px;height:16px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Small card 2 — Banarasi Bazaar-inspired -->
+          <div class="stack-card stack-small-2">
+            <div class="stack-main-inner">
+              <div class="stack-browser-bar"><i></i><i></i><i></i></div>
+              <div class="stack-main-hero" style="flex:1;margin-bottom:0;">
+                <div class="stack-h1" style="width:64%;"></div>
+                <div class="stack-h2" style="width:40%;"></div>
+                <div class="stack-btn" style="width:48px;height:14px;"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<!-- ============================================================
+     MARQUEE
+============================================================ -->
+<div class="marquee">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item">UX Research</div>
+    <div class="marquee-item">Design Systems</div>
+    <div class="marquee-item">Ecommerce UX</div>
+    <div class="marquee-item">Mobile-First Design</div>
+    <div class="marquee-item">Prototyping</div>
+    <div class="marquee-item">Conversion Design</div>
+    <div class="marquee-item">Accessibility</div>
+    <div class="marquee-item">Visual Identity</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PORTFOLIO — 4 CASE STUDIES
+============================================================ -->
+<section class="section" id="portfolio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Selected Work</div>
+      <h2 class="section-title">Four saree ecommerce platforms. Four different problems solved.</h2>
+      <p class="section-desc">
+        Each project shipped end-to-end — from user research and wireframes
+        to polished UI, design systems, and developer handoff. Click any
+        case study to view the live site.
+      </p>
+    </div>
+
+    <div class="portfolio-grid">
+
+      <!-- ===== CASE 01 — Trendoye ===== -->
+      <article class="case-card reveal"
+        style="--c1:rgba(150,40,60,.22);--c2:rgba(212,165,116,.14);--c1-solid:#5c1a2b;--c2-solid:#9c5a3c;">
+        <div class="case-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><i></i><i></i><i></i></div>
+            <div class="mockup-body">
+              <div class="mockup-hero">
+                <div class="mockup-h1"></div>
+                <div class="mockup-h2"></div>
+                <div class="mockup-btn"></div>
+              </div>
+              <div class="mockup-cards">
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-content">
+          <div class="case-meta">
+            <span class="case-num">01</span>
+            <span class="case-line"></span>
+            <span class="case-year">2024</span>
+          </div>
+          <h3 class="case-title">Trendoye</h3>
+          <p class="case-cat">Luxury Handloom Saree Ecommerce</p>
+          <p class="case-desc">
+            A premium handloom brand with zero online presence. Translated the tactile
+            richness of handwoven silk into a digital storefront that felt as exclusive
+            as the product — without intimidating first-time buyers.
+          </p>
+          <div class="case-results">
+            <div class="chip"><span class="chip-val">+38%</span><span class="chip-key">Add to Cart</span></div>
+            <div class="chip"><span class="chip-val">-24%</span><span class="chip-key">Drop-off</span></div>
+            <div class="chip"><span class="chip-val">4.7★</span><span class="chip-key">UX Rating</span></div>
+          </div>
+          <div class="case-tags">
+            <span class="tag">UX Research</span>
+            <span class="tag">Design System</span>
+            <span class="tag">Responsive Web</span>
+          </div>
+          <a href="https://trendoye.aamir68599.workers.dev/" target="_blank" rel="noopener" class="case-link">
+            View Live Site
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ===== CASE 02 — Saree Demo ===== -->
+      <article class="case-card reveal d1"
+        style="--c1:rgba(200,100,70,.2);--c2:rgba(240,180,100,.14);--c1-solid:#8c3a1f;--c2-solid:#c9764a;">
+        <div class="case-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><i></i><i></i><i></i></div>
+            <div class="mockup-body">
+              <div class="mockup-hero">
+                <div class="mockup-h1"></div>
+                <div class="mockup-h2"></div>
+                <div class="mockup-btn"></div>
+              </div>
+              <div class="mockup-cards">
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-content">
+          <div class="case-meta">
+            <span class="case-num">02</span>
+            <span class="case-line"></span>
+            <span class="case-year">2024</span>
+          </div>
+          <h3 class="case-title">Saree Demo</h3>
+          <p class="case-cat">Designer Saree Boutique — D2C Store</p>
+          <p class="case-desc">
+            A boutique with 200+ unique designer pieces and a serious discovery problem.
+            Rebuilt the browse experience around occasion, fabric, and budget so
+            customers could finally find what they came for.
+          </p>
+          <div class="case-results">
+            <div class="chip"><span class="chip-val">2.4x</span><span class="chip-key">Time on Site</span></div>
+            <div class="chip"><span class="chip-val">+52%</span><span class="chip-key">Product Views</span></div>
+            <div class="chip"><span class="chip-val">-31%</span><span class="chip-key">Search Exits</span></div>
+          </div>
+          <div class="case-tags">
+            <span class="tag">Information Architecture</span>
+            <span class="tag">Filters & Search</span>
+            <span class="tag">Mobile UI</span>
+          </div>
+          <a href="https://saree-demo.aamir68599.workers.dev/" target="_blank" rel="noopener" class="case-link">
+            View Live Site
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ===== CASE 03 — Vianta Demo ===== -->
+      <article class="case-card reveal"
+        style="--c1:rgba(40,120,90,.2);--c2:rgba(220,200,120,.13);--c1-solid:#134e3a;--c2-solid:#4a8f6a;">
+        <div class="case-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><i></i><i></i><i></i></div>
+            <div class="mockup-body">
+              <div class="mockup-hero">
+                <div class="mockup-h1"></div>
+                <div class="mockup-h2"></div>
+                <div class="mockup-btn"></div>
+              </div>
+              <div class="mockup-cards">
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-content">
+          <div class="case-meta">
+            <span class="case-num">03</span>
+            <span class="case-line"></span>
+            <span class="case-year">2023</span>
+          </div>
+          <h3 class="case-title">Vianta Demo</h3>
+          <p class="case-cat">Premium Silk Saree Marketplace</p>
+          <p class="case-desc">
+            A multi-seller marketplace where trust was the bottleneck. Designed a
+            verification layer — weave certificates, seller credibility signals,
+            and a comparative product view that removed buyer doubt.
+          </p>
+          <div class="case-results">
+            <div class="chip"><span class="chip-val">+44%</span><span class="chip-key">Conversion</span></div>
+            <div class="chip"><span class="chip-val">-38%</span><span class="chip-key">Returns</span></div>
+            <div class="chip"><span class="chip-val">+61%</span><span class="chip-key">Trust Score</span></div>
+          </div>
+          <div class="case-tags">
+            <span class="tag">Trust Design</span>
+            <span class="tag">Marketplace UX</span>
+            <span class="tag">Component Library</span>
+          </div>
+          <a href="https://vianta-demo.aamir68599.workers.dev/" target="_blank" rel="noopener" class="case-link">
+            View Live Site
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ===== CASE 04 — Saree Store Demo ===== -->
+      <article class="case-card reveal d1"
+        style="--c1:rgba(70,60,160,.22);--c2:rgba(200,130,80,.13);--c1-solid:#2e2a6b;--c2-solid:#7a5c9e;">
+        <div class="case-visual">
+          <div class="mockup">
+            <div class="mockup-bar"><i></i><i></i><i></i></div>
+            <div class="mockup-body">
+              <div class="mockup-hero">
+                <div class="mockup-h1"></div>
+                <div class="mockup-h2"></div>
+                <div class="mockup-btn"></div>
+              </div>
+              <div class="mockup-cards">
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+                <div class="mockup-card"><div class="mockup-card-img"></div><div class="mockup-lines"><span></span><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-content">
+          <div class="case-meta">
+            <span class="case-num">04</span>
+            <span class="case-line"></span>
+            <span class="case-year">2023</span>
+          </div>
+          <h3 class="case-title">Saree Store Demo</h3>
+          <p class="case-cat">Traditional Banarasi Saree Ecommerce</p>
+          <p class="case-desc">
+            A heritage brand targeting a younger, mobile-first audience — without losing
+            its traditional identity. Redesigned the mobile experience around storytelling:
+            the weaver, the loom, the motif, then the product.
+          </p>
+          <div class="case-results">
+            <div class="chip"><span class="chip-val">+73%</span><span class="chip-key">Mobile Orders</span></div>
+            <div class="chip"><span class="chip-val">-41%</span><span class="chip-key">Bounce Rate</span></div>
+            <div class="chip"><span class="chip-val">+29%</span><span class="chip-key">Repeat Buyers</span></div>
+          </div>
+          <div class="case-tags">
+            <span class="tag">Mobile-First</span>
+            <span class="tag">Storytelling</span>
+            <span class="tag">Checkout Redesign</span>
+          </div>
+          <a href="https://sareestoredemo.aamir68599.workers.dev/" target="_blank" rel="noopener" class="case-link">
+            View Live Site
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="portfolio-foot reveal">
+      <p>Want to see the full process behind each project?</p>
+      <a href="#contact" class="btn btn-ghost">
+        Request Detailed Case Studies
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+============================================================ -->
+<section class="section about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <div class="section-tag">About Me</div>
+        <h2 class="section-title">I design for the moment <span class="serif italic accent">before</span> the purchase.</h2>
+        <p>
+          Most ecommerce UX fails at the same point — the moment a customer hesitates.
+          Saree shopping is emotional, tactile, and deeply personal. You can't touch the
+          fabric, so the <strong>interface has to do the feeling for you</strong>.
+        </p>
+        <p>
+          My work sits at the intersection of craft and conversion: high-resolution detail
+          views, honest fabric photography, weave-level storytelling, and checkout flows
+          that never make a customer second-guess.
+        </p>
+        <p>
+          Across four saree ecommerce platforms at <strong>GrowthVia Digital</strong>,
+          I've built design systems from scratch, run usability sessions with first-time
+          online buyers, and shipped interfaces that moved real business metrics — not
+          just portfolio pixels.
+        </p>
+      </div>
+
+      <div class="about-skills reveal d2">
+        <div class="skill">
+          <div class="skill-icon">UX</div>
+          <div class="skill-body">
+            <h4>UX Research & Flows</h4>
+            <p>User interviews, journey mapping, and friction audits across the full purchase funnel.</p>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-icon">UI</div>
+          <div class="skill-body">
+            <h4>Interface Design</h4>
+            <p>High-fidelity screens for web and mobile with strong typographic hierarchy.</p>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-icon">DS</div>
+          <div class="skill-body">
+            <h4>Design Systems</h4>
+            <p>Reusable component libraries with tokens, states, and documentation developers love.</p>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-icon">PT</div>
+          <div class="skill-body">
+            <h4>Prototyping</h4>
+            <p>Interactive Figma prototypes for stakeholder buy-in and usability testing.</p>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-icon">FE</div>
+          <div class="skill-body">
+            <h4>Frontend Handoff</h4>
+            <p>Clean HTML/CSS understanding so designs translate pixel-perfect to production.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+============================================================ -->
+<section class="contact" id="contact">
+  <div class="contact-glow"></div>
+  <div class="wrap contact-inner">
+    <div class="section-tag reveal" style="justify-content:center;display:flex;">Contact</div>
+    <h2 class="contact-title reveal d1">
+      Let's build something <em>worth buying.</em>
+    </h2>
+    <p class="contact-sub reveal d2">
+      I'm currently open to full-time UI/UX roles and select freelance projects.
+      If you're working on ecommerce, D2C, or product design — I'd love to hear about it.
+    </p>
+
+    <div class="contact-actions reveal d3">
+      <a href="mailto:hello@growthvia.digital" class="btn btn-primary">
+        hello@growthvia.digital
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#" class="btn btn-ghost">Download Resume</a>
+    </div>
+
+    <div class="contact-info reveal d4">
+      <div class="info-item">
+        <div class="info-label">Email</div>
+        <div class="info-val">
+          <a href="mailto:hello@growthvia.digital">hello@growthvia.digital</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Location</div>
+        <div class="info-val">India · Open to Remote</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Availability</div>
+        <div class="info-val" style="color:var(--accent);">Open for opportunities</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#home" class="logo">
+          <span class="logo-mark">G</span>
+          <span class="logo-text">
+            <strong>GrowthVia</strong>
+            <span>Digital</span>
+          </span>
+        </a>
+        <p>
+          UI/UX design studio focused on ecommerce, D2C, and premium brand
+          experiences. Currently open to new roles and freelance collaborations.
+        </p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Navigate</h5>
+          <a href="#home">Home</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Live Projects</h5>
+          <a href="https://trendoye.aamir68599.workers.dev/" target="_blank" rel="noopener">Trendoye</a>
+          <a href="https://saree-demo.aamir68599.workers.dev/" target="_blank" rel="noopener">Saree Demo</a>
+          <a href="https://vianta-demo.aamir68599.workers.dev/" target="_blank" rel="noopener">Vianta Demo</a>
+          <a href="https://sareestoredemo.aamir68599.workers.dev/" target="_blank" rel="noopener">Saree Store Demo</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <a href="mailto:hello@growthvia.digital">hello@growthvia.digital</a>
+          <a href="#">+91 00000 00000</a>
+          <a href="#">India · Remote</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 GrowthVia Digital — All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#">LinkedIn</a>
+        <a href="#">Dribbble</a>
+        <a href="#">Behance</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+/* ===== Nav scroll state ===== */
+const nav = document.getElementById('nav');
+const handleScroll = () => {
+  if (window.scrollY > 30) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+};
+window.addEventListener('scroll', handleScroll, { passive:true });
+handleScroll();
+
+/* ===== Mobile menu ===== */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ===== Marquee — duplicate content for seamless loop ===== */
+const track = document.getElementById('marqueeTrack');
+track.innerHTML += track.innerHTML;
+
+/* ===== Scroll reveal ===== */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold:0.12, rootMargin:'0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ===== Case card cursor glow ===== */
+document.querySelectorAll('.case-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+  });
+});
+
+/* ===== Smooth anchor scroll with fixed-nav offset ===== */
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const id = link.getAttribute('href');
+    if (!id || id === '#' || id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.scrollY - 72;
+    window.scrollTo({ top, behavior:'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
