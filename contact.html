@@ -355,6 +355,9 @@ input,textarea,select{font-family:inherit;color:inherit;}
 }
 .form-submit svg{width:15px;height:15px;transition:transform .35s var(--ease);}
 .form-submit:hover svg{transform:translateX(3px);}
+.form-submit:disabled{
+  opacity:.7;cursor:wait;
+}
 
 .form-note{
   font-size:.78rem;color:var(--text-3);
@@ -388,6 +391,35 @@ input,textarea,select{font-family:inherit;color:inherit;}
   color:#5eead4;margin-bottom:5px;
 }
 .form-success-body p{
+  font-size:.84rem;color:var(--text-2);
+  font-weight:300;line-height:1.6;
+}
+
+/* Error message */
+.form-error{
+  display:none;
+  padding:24px 22px;
+  border-radius:var(--radius-sm);
+  border:1px solid rgba(255,110,100,.3);
+  background:rgba(255,110,100,.06);
+  margin-bottom:24px;
+  align-items:flex-start;gap:14px;
+}
+.form-error.show{display:flex;}
+.form-error-icon{
+  flex-shrink:0;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,110,100,.15);
+  border:1px solid rgba(255,110,100,.35);
+  display:flex;align-items:center;justify-content:center;
+  color:#ff6e64;
+}
+.form-error-icon svg{width:16px;height:16px;}
+.form-error-body h4{
+  font-size:.95rem;font-weight:500;
+  color:#ff6e64;margin-bottom:5px;
+}
+.form-error-body p{
   font-size:.84rem;color:var(--text-2);
   font-weight:300;line-height:1.6;
 }
@@ -764,7 +796,7 @@ input,textarea,select{font-family:inherit;color:inherit;}
       <!-- LEFT: Form -->
       <div class="contact-form-wrap reveal">
 
-        <!-- Success message (hidden by default) -->
+        <!-- Success message -->
         <div class="form-success" id="formSuccess">
           <div class="form-success-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -772,6 +804,17 @@ input,textarea,select{font-family:inherit;color:inherit;}
           <div class="form-success-body">
             <h4>Message sent successfully</h4>
             <p>Thanks for reaching out. I'll get back to you within 24 hours.</p>
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="form-error" id="formError">
+          <div class="form-error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          </div>
+          <div class="form-error-body">
+            <h4>Something went wrong</h4>
+            <p>Please try again, or email me directly at <strong>growthviadigital@gmail.com</strong></p>
           </div>
         </div>
 
@@ -788,22 +831,22 @@ input,textarea,select{font-family:inherit;color:inherit;}
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="name">Your Name</label>
-              <input type="text" id="name" class="form-input" placeholder="Jane Doe" required />
+              <input type="text" id="name" name="name" class="form-input" placeholder="Jane Doe" required />
             </div>
             <div class="form-group">
               <label class="form-label" for="email">Email Address</label>
-              <input type="email" id="email" class="form-input" placeholder="you@company.com" required />
+              <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" required />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="phone">Phone (optional)</label>
-              <input type="tel" id="phone" class="form-input" placeholder="+91 00000 00000" />
+              <input type="tel" id="phone" name="phone" class="form-input" placeholder="+91 00000 00000" />
             </div>
             <div class="form-group">
               <label class="form-label" for="subject">Project Type</label>
-              <select id="subject" class="form-select" required>
+              <select id="subject" name="subject" class="form-select" required>
                 <option value="">Select a category…</option>
                 <option value="full-time">Full-time role</option>
                 <option value="freelance">Freelance project</option>
@@ -817,11 +860,11 @@ input,textarea,select{font-family:inherit;color:inherit;}
 
           <div class="form-group">
             <label class="form-label" for="message">Project Details</label>
-            <textarea id="message" class="form-textarea" placeholder="Tell me about your brand, timeline, budget range, and what you're trying to solve…" required></textarea>
+            <textarea id="message" name="message" class="form-textarea" placeholder="Tell me about your brand, timeline, budget range, and what you're trying to solve…" required></textarea>
           </div>
 
-          <button type="submit" class="form-submit">
-            Send Message
+          <button type="submit" class="form-submit" id="submitBtn">
+            <span class="submit-text">Send Message</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
 
@@ -1151,21 +1194,31 @@ document.querySelectorAll('.faq-item').forEach(item => {
   const q = item.querySelector('.faq-q');
   q.addEventListener('click', () => {
     const isOpen = item.classList.contains('open');
-    // close all
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    // open this one if it was closed
     if (!isOpen) item.classList.add('open');
   });
 });
 
-/* ===== Contact form ===== */
+/* ============================================================
+   CONTACT FORM → GOOGLE SHEETS
+============================================================ */
+// ⚠️ Aapka Google Apps Script Web App URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby60pdS9n22Wc-9ZaCRB3FsTQ57g9iNoLXw6FE9KtnTgPOpLhSq0sEvLudZb_Joyjp3mA/exec';
+
 const form = document.getElementById('contactForm');
 const successBox = document.getElementById('formSuccess');
+const errorBox = document.getElementById('formError');
+const submitBtn = document.getElementById('submitBtn');
+const submitText = submitBtn.querySelector('.submit-text');
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // basic validation
+  // Reset messages
+  successBox.classList.remove('show');
+  errorBox.classList.remove('show');
+
+  // Validation
   const name = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
   const subject = document.getElementById('subject').value;
@@ -1176,17 +1229,61 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  // Show success message
-  successBox.classList.add('show');
-  form.reset();
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+  }
 
-  // Scroll success into view
-  successBox.scrollIntoView({ behavior:'smooth', block:'center' });
+  // Loading state
+  const originalText = submitText.textContent;
+  submitText.textContent = 'Sending…';
+  submitBtn.disabled = true;
 
-  // Hide after 6 seconds
-  setTimeout(() => {
-    successBox.classList.remove('show');
-  }, 6000);
+  // Data collect karo
+  const formData = {
+    name: name,
+    email: email,
+    phone: document.getElementById('phone').value.trim(),
+    subject: subject,
+    message: message
+  };
+
+  try {
+    // Google Apps Script ko data bhejo
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script ke liye zaroori
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    });
+
+    // Success (no-cors mein response read nahi hoti, isliye assume karte hain success)
+    successBox.classList.add('show');
+    form.reset();
+    successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    setTimeout(() => {
+      successBox.classList.remove('show');
+    }, 8000);
+
+  } catch (error) {
+    console.error('Form error:', error);
+    errorBox.classList.add('show');
+    errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    setTimeout(() => {
+      errorBox.classList.remove('show');
+    }, 8000);
+
+  } finally {
+    // Button reset
+    submitText.textContent = originalText;
+    submitBtn.disabled = false;
+  }
 });
 
 /* ===== Smooth anchor scroll ===== */
